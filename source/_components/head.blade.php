@@ -14,6 +14,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&family=Outfit:wght@100;300;400;500&display=swap" rel="stylesheet">
 
+@php
+    $isHome = rtrim((string) $page->getPath(), '/') === '';
+    $homeAboutPreload = $isHome ? (($page->homeAbout['image'] ?? null) ?: '/images/about1.jpg') : null;
+@endphp
+@if ($homeAboutPreload)
+<link rel="preload" as="image" href="{{ $page->baseUrl }}{{ $homeAboutPreload }}" fetchpriority="high">
+@endif
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />

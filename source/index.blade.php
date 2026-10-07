@@ -70,13 +70,17 @@
     @endphp
     <section class="bg-[radial-gradient(at_0%_0%,#FFFFFF_0%,#F5F5F5_45%,#E0E7FF_100%)] pt-16 md:pt-20 lg:pt-[120px]" aria-label="關於我們">
         <div class="flex flex-col items-stretch md:flex-row md:items-end">
-            {{-- 左側：圖片拼貼（SVG mask 造型） --}}
-            <div class="relative w-full shrink-0 pr-6 pl-0 md:w-1/2 md:pr-10 lg:pr-[100px]" data-aos="fade-right">
+            {{-- 左側：圖片拼貼（SVG mask 造型；不加 AOS，避免先隱形再淡入看起來像圖片很慢） --}}
+            <div class="relative w-full shrink-0 pr-6 pl-0 md:w-1/2 md:pr-10 lg:pr-[100px]">
                 {{-- 主圖（object_cover.svg 遮罩） --}}
-                <div class="about-visual-mask aspect-[800/732] w-full overflow-hidden">
+                <div class="about-visual-mask aspect-[800/732] w-full overflow-hidden bg-main3/40">
                     <img
                         src="{{ $page->baseUrl }}{{ $homeAboutImage }}"
                         alt="關於我們"
+                        width="800"
+                        height="732"
+                        decoding="async"
+                        fetchpriority="high"
                         class="h-full w-full object-cover"
                     >
                 </div>
@@ -211,10 +215,10 @@
     >
         <script type="application/json" id="home-products-data">{!! json_encode($homeProducts, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
 
-        {{-- 裝飾大字 PRODUCT：裁切浮水印，疊進區塊 --}}
-        <div class="product-watermark" aria-hidden="true">
+        {{-- 裝飾大字 PRODUCT：裁切浮水印，疊進區塊（與 HISTORY／LOCATION 共用 section-watermark） --}}
+        <div class="section-watermark" aria-hidden="true">
             <div class="layout-grid">
-                <span class="product-watermark-text">PRODUCT</span>
+                <span class="section-watermark-text">PRODUCT</span>
             </div>
         </div>
 

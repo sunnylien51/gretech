@@ -77,12 +77,19 @@ description: 人力招募
 
     {{-- ========== 職缺列表 ========== --}}
     <section class="history-section relative overflow-hidden" aria-label="職缺列表" id="jobs">
-        <div class="layout-grid relative z-10 flex flex-col gap-10 pt-20 pb-[120px]">
+        {{-- 裝飾大字 CAREERS：裁切浮水印，與 HISTORY／LOCATION／PRODUCT 同款 --}}
+        <div class="section-watermark" aria-hidden="true">
+            <div class="layout-grid">
+                <span class="section-watermark-text">CAREERS</span>
+            </div>
+        </div>
+
+        <div class="layout-grid relative z-10 flex flex-col gap-10 py-16 md:gap-14 md:py-20 lg:gap-16 lg:pt-24 lg:pb-28">
             {{-- 區塊標題 --}}
-            <div class="flex flex-col items-start gap-5" data-aos="fade-up">
+            <div class="flex flex-col items-center gap-5" data-aos="fade-up">
                 <h2 class="text-ch3 text-gray5 lg:text-ch2">目前職缺</h2>
                 <div class="title-rule" aria-hidden="true"></div>
-                <p class="text-cb2 text-gray4">點選職缺查看內容，再按「應徵此職缺」於卡片內直接填寫。</p>
+                <p class="text-cb2 text-gray4">點選職缺查看內容，若要應徵請點「應徵此職缺」直接填寫。</p>
             </div>
 
             {{-- 職缺卡面 --}}
