@@ -1,4 +1,31 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // 內頁 banner 先播：不要等 AOS／圖示初始化，否則進場會被拖慢
+    document.querySelectorAll('.page-banner').forEach((banner) => {
+        const img = banner.querySelector('.page-banner-image');
+        let done = false;
+
+        const reveal = () => {
+            if (done) {
+                return;
+            }
+            done = true;
+            banner.classList.add('is-ready');
+        };
+
+        if (!img) {
+            reveal();
+            return;
+        }
+
+        if (img.complete && img.naturalWidth > 0) {
+            reveal();
+        } else {
+            img.addEventListener('load', reveal, { once: true });
+            img.addEventListener('error', reveal, { once: true });
+            setTimeout(reveal, 1200);
+        }
+    });
+
     if (typeof AOS !== 'undefined') {
         AOS.init({
             duration: 800,
@@ -15,37 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (typeof Fancybox !== 'undefined') {
         Fancybox.bind('[data-fancybox]', {});
     }
-
-    // 內頁 banner：等背景圖就緒再播進場，避免載入卡頓時動畫已跑完
-    document.querySelectorAll('.page-banner').forEach((banner) => {
-        const img = banner.querySelector('.page-banner-image');
-        let done = false;
-
-        const reveal = () => {
-            if (done) {
-                return;
-            }
-            done = true;
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    banner.classList.add('is-ready');
-                });
-            });
-        };
-
-        if (!img) {
-            reveal();
-            return;
-        }
-
-        if (img.complete && img.naturalWidth > 0) {
-            reveal();
-        } else {
-            img.addEventListener('load', reveal, { once: true });
-            img.addEventListener('error', reveal, { once: true });
-            setTimeout(reveal, 1800);
-        }
-    });
 });
 
 if (typeof Lenis !== 'undefined') {

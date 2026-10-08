@@ -1928,6 +1928,8 @@
   /* 內頁 Banner 高度（compact 用雙 class 提高權重，避免被預設高度蓋掉） */
   .page-banner {
     height: 280px;
+    /* 圖淡入前先留底色，loading 時看得到這塊會出現 */
+    background-color: theme('colors.gray1');
   }
 
   .page-banner.page-banner--compact {
