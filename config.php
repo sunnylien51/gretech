@@ -307,17 +307,17 @@ $config = [
 
     'heroSlides' => [
         [
-            'image' => '/images/main1.jpg',
+            'image' => '/images/main1.webp',
             'enTitle' => 'Always make better',
             'zhText' => '為客戶打造快速、穩定且具效率的整合服務，成為 PCB 與先進 IC 封裝產業最值得信賴的關鍵長期夥伴。',
         ],
         [
-            'image' => '/images/main2.jpg',
+            'image' => '/images/main2.webp',
             'enTitle' => 'Always make better',
             'zhText' => '為客戶打造快速、穩定且具效率的整合服務，成為 PCB 與先進 IC 封裝產業最值得信賴的關鍵長期夥伴。',
         ],
         [
-            'image' => '/images/main3.jpg',
+            'image' => '/images/main3.webp',
             'enTitle' => 'Always make better',
             'zhText' => '為客戶打造快速、穩定且具效率的整合服務，成為 PCB 與先進 IC 封裝產業最值得信賴的關鍵長期夥伴。',
         ],
@@ -583,16 +583,16 @@ $config = [
             'image' => '/images/banner_about.jpg',
         ],
         'products' => [
-            'image' => '/images/banner_products.jpg',
+            'image' => '/images/banner_products.webp',
         ],
         'applications' => [
-            'image' => '/images/banner_app.jpg',
+            'image' => '/images/banner_app.webp',
         ],
         'careers' => [
-            'image' => '/images/banner_careers.jpg',
+            'image' => '/images/banner_careers.webp',
         ],
         'contact' => [
-            'image' => '/images/banner_contact.jpg',
+            'image' => '/images/banner_contact.webp',
         ],
         'privacy' => [
             'image' => '/images/banner_privacy.jpg',
