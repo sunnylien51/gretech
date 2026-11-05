@@ -308,30 +308,30 @@ $config = [
     'heroSlides' => [
         [
             'image' => '/images/main1.webp',
-            'enTitle' => 'Always make better',
+            'enTitle' => 'Your Trusted Partner for PCB & IC',
             'zhText' => '為客戶打造快速、穩定且具效率的整合服務，成為 PCB 與先進 IC 封裝產業最值得信賴的關鍵長期夥伴。',
         ],
         [
             'image' => '/images/main2.webp',
-            'enTitle' => 'Always make better',
-            'zhText' => '為客戶打造快速、穩定且具效率的整合服務，成為 PCB 與先進 IC 封裝產業最值得信賴的關鍵長期夥伴。',
+            'enTitle' => 'Advanced Solutions for PCB Excellence',
+            'zhText' => '深耕PCB製程需求，提供專業設備與整合解決方案，協助客戶提升生產效率與製程穩家性。',
         ],
         [
             'image' => '/images/main3.webp',
-            'enTitle' => 'Always make better',
-            'zhText' => '為客戶打造快速、穩定且具效率的整合服務，成為 PCB 與先進 IC 封裝產業最值得信賴的關鍵長期夥伴。',
+            'enTitle' => 'Your Partner in Process Excellence',
+            'zhText' => '以專業團隊回應客戶需求，成為您值得信賴的合作夥伴。',
         ],
     ],
 
     'footer' => [
-        'address' => '桃園市中壢區龍東路597號',
+        'address' => '桃園市中壢區高鐵站前西路一段268號7F-2',
         'email' => 'gre.tech@msa.hinet.net',
-        'phone' => '03-4668559',
-        'phoneTel' => '034668559',
-        'fax' => '03-4668565',
-        'copyrightName' => '佢朋國際',
+        'phone' => '03-2873700',
+        'phoneTel' => '03-2873700',
+        'fax' => '03-2873701',
+        'copyrightName' => '佢朋',
         /* Google 地圖嵌入連結（分享 → 嵌入地圖 → 複製 iframe 的 src） */
-        'mapUrl' => 'https://www.google.com/maps?q=' . rawurlencode('桃園市中壢區龍東路597號') . '&z=16&output=embed',
+        'mapUrl' => 'https://www.google.com/maps?q=' . rawurlencode('桃園市中壢區高鐵站前西路一段268號7F-2') . '&z=16&output=embed',
     ],
 
     /* 首頁－關於我們（之後後台可編修） */

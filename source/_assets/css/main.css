@@ -2174,8 +2174,8 @@
 
   .history-section {
     background-color: theme('colors.bg');
-    /* 相對 static/ 目錄，Live Server 開 build_production 子路徑也能載到 */
-    background-image: url('../images/pattern.jpg');
+    /* 與 object_cover 同層：從 _assets/css 指到 source/images，Vite 開發／打包都會正確解析 */
+    background-image: url('../../images/pattern.jpg');
     background-repeat: repeat;
   }
 
