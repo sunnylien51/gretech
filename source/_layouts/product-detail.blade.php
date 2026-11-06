@@ -2,8 +2,10 @@
 
 @section('body')
     @php
-        $intro = trim((string) ($page->intro ?? ''));
-        $paragraphs = $intro !== '' ? preg_split("/\n\s*\n/", $intro) : [];
+        $bodyHtml = gretech_editor_html($page->body ?? '');
+        if ($bodyHtml === '') {
+            $bodyHtml = gretech_editor_html($page->intro ?? '');
+        }
         $image = $page->image ?? '';
         $l1Id = trim((string) ($page->l1_id ?? ''));
         $l2Id = trim((string) ($page->l2_id ?? ''));
@@ -46,11 +48,11 @@
                         <div class="title-rule" aria-hidden="true"></div>
                     </div>
 
-                    <div class="product-detail-body">
-                        @foreach ($paragraphs as $paragraph)
-                            <p class="text-cb2 text-gray4">{{ $paragraph }}</p>
-                        @endforeach
-                    </div>
+                    @if ($bodyHtml !== '')
+                        <div class="product-detail-body text-cb2 text-gray4">
+                            {!! $bodyHtml !!}
+                        </div>
+                    @endif
 
                     <div class="product-detail-actions">
                         <a href="{{ $page->baseUrl }}/contact/" class="btn-solid">

@@ -2,11 +2,10 @@
 
 @section('body')
     @php
-        $body = trim((string) ($page->body ?? ''));
-        if ($body === '') {
-            $body = trim((string) ($page->intro ?? ''));
+        $bodyHtml = gretech_editor_html($page->body ?? '');
+        if ($bodyHtml === '') {
+            $bodyHtml = gretech_editor_html($page->intro ?? '');
         }
-        $paragraphs = $body !== '' ? preg_split("/\n\s*\n/", $body) : [];
         $tags = [];
         foreach (is_array($page->tags ?? null) ? $page->tags : [] as $tag) {
             $tag = trim((string) $tag);
@@ -55,11 +54,11 @@
                         <div class="title-rule" aria-hidden="true"></div>
                     </div>
 
-                    <div class="product-detail-body">
-                        @foreach ($paragraphs as $paragraph)
-                            <p class="text-cb2 text-gray4 whitespace-pre-line">{{ $paragraph }}</p>
-                        @endforeach
-                    </div>
+                    @if ($bodyHtml !== '')
+                        <div class="product-detail-body text-cb2 text-gray4">
+                            {!! $bodyHtml !!}
+                        </div>
+                    @endif
 
                     @if (count($tags) > 0)
                         <div class="product-detail-tags">

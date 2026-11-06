@@ -36,6 +36,7 @@ function gretech_enrich_product_catalog(array $catalog): array
                 $title = trim((string) ($product['title'] ?? $product['name'] ?? ''));
                 $image = trim((string) ($product['image'] ?? ''));
                 $intro = trim((string) ($product['intro'] ?? ''));
+                $body = trim((string) ($product['body'] ?? ''));
 
                 if ($intro === '') {
                     $intro = $title . '。歡迎聯繫我們了解規格、應用與供貨細節。';
@@ -53,6 +54,7 @@ function gretech_enrich_product_catalog(array $catalog): array
                     'title' => $title,
                     'image' => $image,
                     'intro' => $intro,
+                    'body' => $body,
                     'showOnHome' => $showOnHome,
                     'homeOrder' => $homeOrder,
                     'slug' => gretech_product_slug($l2['id'], $title, $n, $used),
@@ -93,6 +95,7 @@ function gretech_product_collection_items($catalog): array
                     'description' => $product['intro'] ?? '',
                     'image' => $product['image'] ?? '',
                     'intro' => $product['intro'] ?? '',
+                    'body' => $product['body'] ?? '',
                     'showOnHome' => (bool) ($product['showOnHome'] ?? false),
                     'homeOrder' => $product['homeOrder'] ?? null,
                     'l1_id' => $product['l1_id'] ?? '',
@@ -119,6 +122,37 @@ function gretech_as_array($value): array
     }
 
     return [];
+}
+
+/**
+ * 後台 HTML 編輯器內文：已含標籤則原樣輸出；純文字則轉成 <p>（雙換行分段）。
+ */
+function gretech_editor_html($value): string
+{
+    $html = trim((string) $value);
+    if ($html === '') {
+        return '';
+    }
+
+    if (preg_match('/<[a-z][\s\S]*>/i', $html) === 1) {
+        return $html;
+    }
+
+    $parts = preg_split("/\n\s*\n/", $html) ?: [];
+    $blocks = [];
+
+    foreach ($parts as $part) {
+        $part = trim((string) $part);
+        if ($part === '') {
+            continue;
+        }
+
+        $escaped = htmlspecialchars($part, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $escaped = nl2br($escaped, false);
+        $blocks[] = '<p>' . $escaped . '</p>';
+    }
+
+    return implode("\n", $blocks);
 }
 
 /** 首頁產品區塊：與產品目錄連動（上架於首頁 + 有圖，最多 $limit 筆；可設 homeOrder 調整順序） */
@@ -482,7 +516,7 @@ $config = [
             'category' => 'PCB製程',
             'title' => '焊接與噴錫',
             'intro' => '支援焊接與表面塗層製程，確保連接品質與可靠度。',
-            'body' => "提供應用於 PCB 製程的焊接與噴錫相關材料與耗材，協助提升焊接品質、錫層均勻性及製程穩定性。\n\n適用於 PCB 製造、電子零組件及相關電路板加工製程，滿足不同生產需求。",
+            'body' => '<p>提供應用於 PCB 製程的焊接與噴錫相關材料與耗材，協助提升焊接品質、錫層均勻性及製程穩定性。</p><p>適用於 PCB 製造、電子零組件及相關電路板加工製程，滿足不同生產需求。</p>',
             'tags' => ['PCB 焊接', '噴錫製程', '電路板表面處理', '電子零組件加工'],
             'image' => '/images/app6.jpg',
             'relatedProducts' => [
@@ -627,7 +661,8 @@ $config = [
                             'title' => '德國SINGULUS/MASS｜真空塞孔機VCP M+',
                             'image' => '/images/product6.png',
                             'homeOrder' => 1,
-                            'intro' => "專為 PCB 製造中的 Through-Hole（通孔）及 Blind Via（盲孔）填孔製程所設計，可使用導電或非導電膏材進行高精度真空填孔。設備透過完整真空腔體對 PCB 進行抽真空，使孔洞內的空氣與水氣有效排出，再進行塞孔膏填充，有助於降低氣泡與填充不完整的風險，提升 Via Filling 的一致性與製程穩定性。其中 VCP 系統採用完整真空腔體（Full Vacuum Chamber），可讓整片 PCB 在受控真空環境下進行處理，並支援 Through-Hole 與 Blind Via 的雙面填充。\n\n依不同生產需求，提供彈性的真空塞孔設備配置：\n\n1塞孔+1刮刀→真空塞孔＋表面膏材刮除的一體化製程\n2塞孔+1刮刀→多次塞孔／較高填孔要求／較高產能需求\n1塞孔→基本真空塞孔需求",
+                            'intro' => '專為 PCB Through-Hole／Blind Via 填孔製程設計，支援導電或非導電膏材高精度真空填孔。',
+                            'body' => '<p>專為 PCB 製造中的 Through-Hole（通孔）及 Blind Via（盲孔）填孔製程所設計，可使用導電或非導電膏材進行高精度真空填孔。設備透過完整真空腔體對 PCB 進行抽真空，使孔洞內的空氣與水氣有效排出，再進行塞孔膏填充，有助於降低氣泡與填充不完整的風險，提升 Via Filling 的一致性與製程穩定性。其中 VCP 系統採用完整真空腔體（Full Vacuum Chamber），可讓整片 PCB 在受控真空環境下進行處理，並支援 Through-Hole 與 Blind Via 的雙面填充。</p><p>依不同生產需求，提供彈性的真空塞孔設備配置：</p><ul><li>1塞孔+1刮刀→真空塞孔＋表面膏材刮除的一體化製程</li><li>2塞孔+1刮刀→多次塞孔／較高填孔要求／較高產能需求</li><li>1塞孔→基本真空塞孔需求</li></ul>',
                         ],
                     ],
                 ],

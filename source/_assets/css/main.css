@@ -1186,16 +1186,75 @@
     margin: 0;
   }
 
+  /* 產品／應用內文：後台 HTML 編輯器輸出 */
   .product-detail-body {
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
     width: 100%;
+    max-width: 40rem;
   }
 
-  .product-detail-body p {
+  .product-detail-body > :first-child {
+    margin-top: 0;
+  }
+
+  .product-detail-body > :last-child {
+    margin-bottom: 0;
+  }
+
+  .product-detail-body p,
+  .product-detail-body ul,
+  .product-detail-body ol {
     margin: 0;
-    max-width: 40rem;
+  }
+
+  .product-detail-body ul,
+  .product-detail-body ol {
+    padding-left: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .product-detail-body li::marker {
+    color: theme('colors.main2');
+  }
+
+  .product-detail-body a {
+    color: theme('colors.main1');
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .product-detail-body strong,
+  .product-detail-body b {
+    color: theme('colors.gray5');
+    font-weight: 700;
+  }
+
+  .product-detail-body h3,
+  .product-detail-body h4 {
+    margin: 0.35rem 0 0;
+    color: theme('colors.gray5');
+    font-family: theme('fontFamily.sans');
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .product-detail-body h3 {
+    font-size: 1.125rem;
+  }
+
+  .product-detail-body h4 {
+    font-size: 1rem;
+  }
+
+  .product-detail-body img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
   }
 
   .product-detail-tags {
