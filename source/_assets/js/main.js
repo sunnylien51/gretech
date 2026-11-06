@@ -40,7 +40,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (typeof Fancybox !== 'undefined') {
-        Fancybox.bind('[data-fancybox]', {});
+        // 關掉縮放進／出場：證照縮圖有 aspect-ratio／flex，zoom 關閉時會先縮小再跳回造成卡頓
+        Fancybox.bind('[data-fancybox]', {
+            Images: {
+                zoom: false,
+            },
+            showClass: 'f-fadeIn',
+            hideClass: 'f-fadeOut',
+        });
     }
 });
 

@@ -236,6 +236,14 @@ function gretech_enrich_applications(array $applications): array
             }
         }
 
+        $relatedProducts = [];
+        foreach (gretech_as_array($app['relatedProducts'] ?? []) as $relatedSlug) {
+            $relatedSlug = trim((string) $relatedSlug);
+            if ($relatedSlug !== '' && !in_array($relatedSlug, $relatedProducts, true)) {
+                $relatedProducts[] = $relatedSlug;
+            }
+        }
+
         $enriched[] = [
             'category' => (string) ($app['category'] ?? ''),
             'title' => $title,
@@ -244,6 +252,7 @@ function gretech_enrich_applications(array $applications): array
             'tags' => $tags,
             'image' => $image,
             'showOnHome' => $showOnHome,
+            'relatedProducts' => $relatedProducts,
             'slug' => gretech_application_slug($app, $n, $used),
         ];
     }
@@ -269,7 +278,52 @@ function gretech_application_collection_items($applications): array
             'image' => $app['image'] ?? '',
             'category' => $app['category'] ?? '',
             'showOnHome' => (bool) ($app['showOnHome'] ?? true),
+            'relatedProducts' => gretech_as_array($app['relatedProducts'] ?? []),
             'content' => '',
+        ];
+    }
+
+    return $items;
+}
+
+/**
+ * 應用內頁「相關產品」：依 slug 從產品目錄解析（可複選；僅回傳目錄中已存在的產品＝已上架）
+ */
+function gretech_related_products($relatedSlugs, $catalog): array
+{
+    $wanted = [];
+    foreach (gretech_as_array($relatedSlugs) as $slug) {
+        $slug = trim((string) $slug);
+        if ($slug !== '') {
+            $wanted[] = $slug;
+        }
+    }
+
+    if (count($wanted) === 0) {
+        return [];
+    }
+
+    $bySlug = [];
+    foreach (gretech_product_collection_items(gretech_as_array($catalog)) as $product) {
+        $slug = trim((string) ($product['filename'] ?? $product['slug'] ?? ''));
+        if ($slug !== '') {
+            $bySlug[$slug] = $product;
+        }
+    }
+
+    $items = [];
+    foreach ($wanted as $slug) {
+        if (!isset($bySlug[$slug])) {
+            continue;
+        }
+        $product = $bySlug[$slug];
+        $items[] = [
+            'slug' => $slug,
+            'title' => (string) ($product['title'] ?? ''),
+            'image' => trim((string) ($product['image'] ?? '')),
+            'intro' => trim((string) ($product['intro'] ?? $product['description'] ?? '')),
+            'l1_name' => trim((string) ($product['l1_name'] ?? '')),
+            'l2_name' => trim((string) ($product['l2_name'] ?? '')),
         ];
     }
 
@@ -376,30 +430,53 @@ $config = [
             'intro' => '穩定去除毛邊與表面不平整，提升後續製程品質。',
             'image' => '/images/app1.jpg',
             'showOnHome' => true,
+            'relatedProducts' => [
+                'nonwoven-wheel-320-600-800-1000',
+                'abrasive-3m-734-80-120-180-240-400-600-800-1200',
+                'surface-polaemassa-evo3000',
+            ],
         ],
         [
             'category' => 'PCB製程',
             'title' => '水洗與清潔',
             'intro' => '有效清除殘留物與污染，維持板面潔淨與可靠度。',
             'image' => '/images/app2.jpg',
+            'relatedProducts' => [
+                'washing-pcb-deburr',
+                'washing-pcb-3',
+                'filter-pp-10-20-30',
+            ],
         ],
         [
             'category' => 'PCB製程',
             'title' => '表面處理',
             'intro' => '優化板面狀態，支援後續鍍覆、塗佈與接合製程。',
             'image' => '/images/app3.jpg',
+            'relatedProducts' => [
+                'surface-polaemassa-evo3000',
+                'surface-polaemassa-pem-650',
+                'analysis-mc-l3q-mc-mt',
+            ],
         ],
         [
             'category' => 'PCB製程',
             'title' => '製程保護',
             'intro' => '於關鍵製程提供保護方案，降低損傷與不良風險。',
             'image' => '/images/app4.jpg',
+            'relatedProducts' => [
+                'tape-3m-600',
+                'tape-cm8g',
+                'edge-protect-pcb',
+            ],
         ],
         [
             'category' => 'PCB製程',
             'title' => '塞孔與填孔',
             'intro' => '對應各種孔徑與結構需求，提升填孔均勻與穩定度。',
             'image' => '/images/app5.jpg',
+            'relatedProducts' => [
+                'plugging-singulus-mass-vcp-m',
+            ],
         ],
         [
             'category' => 'PCB製程',
@@ -408,30 +485,53 @@ $config = [
             'body' => "提供應用於 PCB 製程的焊接與噴錫相關材料與耗材，協助提升焊接品質、錫層均勻性及製程穩定性。\n\n適用於 PCB 製造、電子零組件及相關電路板加工製程，滿足不同生產需求。",
             'tags' => ['PCB 焊接', '噴錫製程', '電路板表面處理', '電子零組件加工'],
             'image' => '/images/app6.jpg',
+            'relatedProducts' => [
+                'solder-63-37',
+                'solder-306005-snag',
+                'tape-cm8g',
+            ],
         ],
         [
             'category' => 'PCB製程材料與耗材',
             'title' => '研磨耗材',
             'intro' => '提供穩定研磨耗材，協助維持產線效率與成品品質。',
             'image' => '/images/app7.jpg',
+            'relatedProducts' => [
+                'nonwoven-wheel-320-600-800-1000',
+                'abrasive-3m-734-80-120-180-240-400-600-800-1200',
+                'nonwoven-wheel-3m-pcfb',
+            ],
         ],
         [
             'category' => 'PCB製程材料與耗材',
             'title' => '清潔與過濾耗材',
             'intro' => '支援清潔與過濾需求，維持製程環境與藥水穩定。',
             'image' => '/images/app8.jpg',
+            'relatedProducts' => [
+                'filter-pp-10-20-30',
+                'filter-10-20-30',
+                'filter-pva',
+            ],
         ],
         [
             'category' => 'PCB製程材料與耗材',
             'title' => '製程膠帶與保護材料',
             'intro' => '提供膠帶與保護材料，協助遮蔽、固定與表面防護。',
             'image' => '/images/app9.jpg',
+            'relatedProducts' => [
+                'tape-3m-600',
+                'tape-3m-681',
+                'tape-vp3wha',
+            ],
         ],
         [
             'category' => '工業設備與製程應用',
             'title' => '空氣輸送與乾燥',
             'intro' => '優化輸送與乾燥流程，提升產線銜接效率與穩定性。',
             'image' => '/images/app10.jpg',
+            'relatedProducts' => [
+                'air-dry-cim-7-5',
+            ],
         ],
     ],
 

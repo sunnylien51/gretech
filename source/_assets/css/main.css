@@ -1268,6 +1268,21 @@
     color: theme('colors.main1');
   }
 
+  /* 應用內頁：相關產品（介紹下方全寬；卡片沿用 .products-item，兩兩並列） */
+  .related-products {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2rem;
+  }
+
+  .related-products .products-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
   @screen md {
     .product-detail {
       grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.2fr);
@@ -1278,6 +1293,15 @@
     .product-detail-media {
       width: 100%;
       max-width: none;
+    }
+
+    .related-products {
+      gap: 2.5rem;
+    }
+
+    .related-products .products-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.875rem 1.25rem;
     }
   }
 
@@ -2218,6 +2242,37 @@
 
   .history-item:last-child .history-line {
     display: none;
+  }
+
+  /* 外框鎖 3/4 讓三張同高；圖用 contain 完整顯示並置中 */
+  .sustainability-cert {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border: 1px solid theme('colors.gray1');
+    background-color: theme('colors.bg');
+    padding: 0.75rem;
+    transition: border-color 0.25s ease;
+  }
+
+  .sustainability-cert:hover {
+    border-color: theme('colors.main2');
+  }
+
+  .sustainability-cert:focus-visible {
+    outline: 2px solid theme('colors.main1');
+    outline-offset: 2px;
+  }
+
+  .sustainability-cert-image {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
   }
 
   /* 標題底線：雙色短線（main2 + gray2） */
