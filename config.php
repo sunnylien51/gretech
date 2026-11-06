@@ -36,6 +36,7 @@ function gretech_enrich_product_catalog(array $catalog): array
                 $title = trim((string) ($product['title'] ?? $product['name'] ?? ''));
                 $image = trim((string) ($product['image'] ?? ''));
                 $intro = trim((string) ($product['intro'] ?? ''));
+                $body = trim((string) ($product['body'] ?? ''));
 
                 if ($intro === '') {
                     $intro = $title . '。歡迎聯繫我們了解規格、應用與供貨細節。';
@@ -53,6 +54,7 @@ function gretech_enrich_product_catalog(array $catalog): array
                     'title' => $title,
                     'image' => $image,
                     'intro' => $intro,
+                    'body' => $body,
                     'showOnHome' => $showOnHome,
                     'homeOrder' => $homeOrder,
                     'slug' => gretech_product_slug($l2['id'], $title, $n, $used),
@@ -93,6 +95,7 @@ function gretech_product_collection_items($catalog): array
                     'description' => $product['intro'] ?? '',
                     'image' => $product['image'] ?? '',
                     'intro' => $product['intro'] ?? '',
+                    'body' => $product['body'] ?? '',
                     'showOnHome' => (bool) ($product['showOnHome'] ?? false),
                     'homeOrder' => $product['homeOrder'] ?? null,
                     'l1_id' => $product['l1_id'] ?? '',
@@ -119,6 +122,37 @@ function gretech_as_array($value): array
     }
 
     return [];
+}
+
+/**
+ * 後台 HTML 編輯器內文：已含標籤則原樣輸出；純文字則轉成 <p>（雙換行分段）。
+ */
+function gretech_editor_html($value): string
+{
+    $html = trim((string) $value);
+    if ($html === '') {
+        return '';
+    }
+
+    if (preg_match('/<[a-z][\s\S]*>/i', $html) === 1) {
+        return $html;
+    }
+
+    $parts = preg_split("/\n\s*\n/", $html) ?: [];
+    $blocks = [];
+
+    foreach ($parts as $part) {
+        $part = trim((string) $part);
+        if ($part === '') {
+            continue;
+        }
+
+        $escaped = htmlspecialchars($part, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $escaped = nl2br($escaped, false);
+        $blocks[] = '<p>' . $escaped . '</p>';
+    }
+
+    return implode("\n", $blocks);
 }
 
 /** 首頁產品區塊：與產品目錄連動（上架於首頁 + 有圖，最多 $limit 筆；可設 homeOrder 調整順序） */
@@ -236,6 +270,14 @@ function gretech_enrich_applications(array $applications): array
             }
         }
 
+        $relatedProducts = [];
+        foreach (gretech_as_array($app['relatedProducts'] ?? []) as $relatedSlug) {
+            $relatedSlug = trim((string) $relatedSlug);
+            if ($relatedSlug !== '' && !in_array($relatedSlug, $relatedProducts, true)) {
+                $relatedProducts[] = $relatedSlug;
+            }
+        }
+
         $enriched[] = [
             'category' => (string) ($app['category'] ?? ''),
             'title' => $title,
@@ -244,6 +286,7 @@ function gretech_enrich_applications(array $applications): array
             'tags' => $tags,
             'image' => $image,
             'showOnHome' => $showOnHome,
+            'relatedProducts' => $relatedProducts,
             'slug' => gretech_application_slug($app, $n, $used),
         ];
     }
@@ -269,7 +312,52 @@ function gretech_application_collection_items($applications): array
             'image' => $app['image'] ?? '',
             'category' => $app['category'] ?? '',
             'showOnHome' => (bool) ($app['showOnHome'] ?? true),
+            'relatedProducts' => gretech_as_array($app['relatedProducts'] ?? []),
             'content' => '',
+        ];
+    }
+
+    return $items;
+}
+
+/**
+ * 應用內頁「相關產品」：依 slug 從產品目錄解析（可複選；僅回傳目錄中已存在的產品＝已上架）
+ */
+function gretech_related_products($relatedSlugs, $catalog): array
+{
+    $wanted = [];
+    foreach (gretech_as_array($relatedSlugs) as $slug) {
+        $slug = trim((string) $slug);
+        if ($slug !== '') {
+            $wanted[] = $slug;
+        }
+    }
+
+    if (count($wanted) === 0) {
+        return [];
+    }
+
+    $bySlug = [];
+    foreach (gretech_product_collection_items(gretech_as_array($catalog)) as $product) {
+        $slug = trim((string) ($product['filename'] ?? $product['slug'] ?? ''));
+        if ($slug !== '') {
+            $bySlug[$slug] = $product;
+        }
+    }
+
+    $items = [];
+    foreach ($wanted as $slug) {
+        if (!isset($bySlug[$slug])) {
+            continue;
+        }
+        $product = $bySlug[$slug];
+        $items[] = [
+            'slug' => $slug,
+            'title' => (string) ($product['title'] ?? ''),
+            'image' => trim((string) ($product['image'] ?? '')),
+            'intro' => trim((string) ($product['intro'] ?? $product['description'] ?? '')),
+            'l1_name' => trim((string) ($product['l1_name'] ?? '')),
+            'l2_name' => trim((string) ($product['l2_name'] ?? '')),
         ];
     }
 
@@ -307,31 +395,31 @@ $config = [
 
     'heroSlides' => [
         [
-            'image' => '/images/main1.jpg',
-            'enTitle' => 'Always make better',
+            'image' => '/images/main1.webp',
+            'enTitle' => 'Your Trusted Partner for PCB & IC',
             'zhText' => '為客戶打造快速、穩定且具效率的整合服務，成為 PCB 與先進 IC 封裝產業最值得信賴的關鍵長期夥伴。',
         ],
         [
-            'image' => '/images/main2.jpg',
-            'enTitle' => 'Always make better',
-            'zhText' => '為客戶打造快速、穩定且具效率的整合服務，成為 PCB 與先進 IC 封裝產業最值得信賴的關鍵長期夥伴。',
+            'image' => '/images/main2.webp',
+            'enTitle' => 'Advanced Solutions for PCB Excellence',
+            'zhText' => '深耕PCB製程需求，提供專業設備與整合解決方案，協助客戶提升生產效率與製程穩家性。',
         ],
         [
-            'image' => '/images/main3.jpg',
-            'enTitle' => 'Always make better',
-            'zhText' => '為客戶打造快速、穩定且具效率的整合服務，成為 PCB 與先進 IC 封裝產業最值得信賴的關鍵長期夥伴。',
+            'image' => '/images/main3.webp',
+            'enTitle' => 'Your Partner in Process Excellence',
+            'zhText' => '以專業團隊回應客戶需求，成為您值得信賴的合作夥伴。',
         ],
     ],
 
     'footer' => [
-        'address' => '桃園市中壢區龍東路597號',
+        'address' => '桃園市中壢區高鐵站前西路一段268號7F-2',
         'email' => 'gre.tech@msa.hinet.net',
-        'phone' => '03-4668559',
-        'phoneTel' => '034668559',
-        'fax' => '03-4668565',
-        'copyrightName' => '佢朋國際',
+        'phone' => '03-2873700',
+        'phoneTel' => '03-2873700',
+        'fax' => '03-2873701',
+        'copyrightName' => '佢朋',
         /* Google 地圖嵌入連結（分享 → 嵌入地圖 → 複製 iframe 的 src） */
-        'mapUrl' => 'https://www.google.com/maps?q=' . rawurlencode('桃園市中壢區龍東路597號') . '&z=16&output=embed',
+        'mapUrl' => 'https://www.google.com/maps?q=' . rawurlencode('桃園市中壢區高鐵站前西路一段268號7F-2') . '&z=16&output=embed',
     ],
 
     /* 首頁－關於我們（之後後台可編修） */
@@ -376,62 +464,108 @@ $config = [
             'intro' => '穩定去除毛邊與表面不平整，提升後續製程品質。',
             'image' => '/images/app1.jpg',
             'showOnHome' => true,
+            'relatedProducts' => [
+                'nonwoven-wheel-320-600-800-1000',
+                'abrasive-3m-734-80-120-180-240-400-600-800-1200',
+                'surface-polaemassa-evo3000',
+            ],
         ],
         [
             'category' => 'PCB製程',
             'title' => '水洗與清潔',
             'intro' => '有效清除殘留物與污染，維持板面潔淨與可靠度。',
             'image' => '/images/app2.jpg',
+            'relatedProducts' => [
+                'washing-pcb-deburr',
+                'washing-pcb-3',
+                'filter-pp-10-20-30',
+            ],
         ],
         [
             'category' => 'PCB製程',
             'title' => '表面處理',
             'intro' => '優化板面狀態，支援後續鍍覆、塗佈與接合製程。',
             'image' => '/images/app3.jpg',
+            'relatedProducts' => [
+                'surface-polaemassa-evo3000',
+                'surface-polaemassa-pem-650',
+                'analysis-mc-l3q-mc-mt',
+            ],
         ],
         [
             'category' => 'PCB製程',
             'title' => '製程保護',
             'intro' => '於關鍵製程提供保護方案，降低損傷與不良風險。',
             'image' => '/images/app4.jpg',
+            'relatedProducts' => [
+                'tape-3m-600',
+                'tape-cm8g',
+                'edge-protect-pcb',
+            ],
         ],
         [
             'category' => 'PCB製程',
             'title' => '塞孔與填孔',
             'intro' => '對應各種孔徑與結構需求，提升填孔均勻與穩定度。',
             'image' => '/images/app5.jpg',
+            'relatedProducts' => [
+                'plugging-singulus-mass-vcp-m',
+            ],
         ],
         [
             'category' => 'PCB製程',
             'title' => '焊接與噴錫',
             'intro' => '支援焊接與表面塗層製程，確保連接品質與可靠度。',
-            'body' => "提供應用於 PCB 製程的焊接與噴錫相關材料與耗材，協助提升焊接品質、錫層均勻性及製程穩定性。\n\n適用於 PCB 製造、電子零組件及相關電路板加工製程，滿足不同生產需求。",
+            'body' => '<p>提供應用於 PCB 製程的焊接與噴錫相關材料與耗材，協助提升焊接品質、錫層均勻性及製程穩定性。</p><p>適用於 PCB 製造、電子零組件及相關電路板加工製程，滿足不同生產需求。</p>',
             'tags' => ['PCB 焊接', '噴錫製程', '電路板表面處理', '電子零組件加工'],
             'image' => '/images/app6.jpg',
+            'relatedProducts' => [
+                'solder-63-37',
+                'solder-306005-snag',
+                'tape-cm8g',
+            ],
         ],
         [
             'category' => 'PCB製程材料與耗材',
             'title' => '研磨耗材',
             'intro' => '提供穩定研磨耗材，協助維持產線效率與成品品質。',
             'image' => '/images/app7.jpg',
+            'relatedProducts' => [
+                'nonwoven-wheel-320-600-800-1000',
+                'abrasive-3m-734-80-120-180-240-400-600-800-1200',
+                'nonwoven-wheel-3m-pcfb',
+            ],
         ],
         [
             'category' => 'PCB製程材料與耗材',
             'title' => '清潔與過濾耗材',
             'intro' => '支援清潔與過濾需求，維持製程環境與藥水穩定。',
             'image' => '/images/app8.jpg',
+            'relatedProducts' => [
+                'filter-pp-10-20-30',
+                'filter-10-20-30',
+                'filter-pva',
+            ],
         ],
         [
             'category' => 'PCB製程材料與耗材',
             'title' => '製程膠帶與保護材料',
             'intro' => '提供膠帶與保護材料，協助遮蔽、固定與表面防護。',
             'image' => '/images/app9.jpg',
+            'relatedProducts' => [
+                'tape-3m-600',
+                'tape-3m-681',
+                'tape-vp3wha',
+            ],
         ],
         [
             'category' => '工業設備與製程應用',
             'title' => '空氣輸送與乾燥',
             'intro' => '優化輸送與乾燥流程，提升產線銜接效率與穩定性。',
             'image' => '/images/app10.jpg',
+            'relatedProducts' => [
+                'air-dry-cim-7-5',
+            ],
         ],
     ],
 
@@ -527,7 +661,8 @@ $config = [
                             'title' => '德國SINGULUS/MASS｜真空塞孔機VCP M+',
                             'image' => '/images/product6.png',
                             'homeOrder' => 1,
-                            'intro' => "專為 PCB 製造中的 Through-Hole（通孔）及 Blind Via（盲孔）填孔製程所設計，可使用導電或非導電膏材進行高精度真空填孔。設備透過完整真空腔體對 PCB 進行抽真空，使孔洞內的空氣與水氣有效排出，再進行塞孔膏填充，有助於降低氣泡與填充不完整的風險，提升 Via Filling 的一致性與製程穩定性。其中 VCP 系統採用完整真空腔體（Full Vacuum Chamber），可讓整片 PCB 在受控真空環境下進行處理，並支援 Through-Hole 與 Blind Via 的雙面填充。\n\n依不同生產需求，提供彈性的真空塞孔設備配置：\n\n1塞孔+1刮刀→真空塞孔＋表面膏材刮除的一體化製程\n2塞孔+1刮刀→多次塞孔／較高填孔要求／較高產能需求\n1塞孔→基本真空塞孔需求",
+                            'intro' => '專為 PCB Through-Hole／Blind Via 填孔製程設計，支援導電或非導電膏材高精度真空填孔。',
+                            'body' => '<p>專為 PCB 製造中的 Through-Hole（通孔）及 Blind Via（盲孔）填孔製程所設計，可使用導電或非導電膏材進行高精度真空填孔。設備透過完整真空腔體對 PCB 進行抽真空，使孔洞內的空氣與水氣有效排出，再進行塞孔膏填充，有助於降低氣泡與填充不完整的風險，提升 Via Filling 的一致性與製程穩定性。其中 VCP 系統採用完整真空腔體（Full Vacuum Chamber），可讓整片 PCB 在受控真空環境下進行處理，並支援 Through-Hole 與 Blind Via 的雙面填充。</p><p>依不同生產需求，提供彈性的真空塞孔設備配置：</p><ul><li>1塞孔+1刮刀→真空塞孔＋表面膏材刮除的一體化製程</li><li>2塞孔+1刮刀→多次塞孔／較高填孔要求／較高產能需求</li><li>1塞孔→基本真空塞孔需求</li></ul>',
                         ],
                     ],
                 ],
@@ -583,16 +718,16 @@ $config = [
             'image' => '/images/banner_about.jpg',
         ],
         'products' => [
-            'image' => '/images/banner_products.jpg',
+            'image' => '/images/banner_products.webp',
         ],
         'applications' => [
-            'image' => '/images/banner_app.jpg',
+            'image' => '/images/banner_app.webp',
         ],
         'careers' => [
-            'image' => '/images/banner_careers.jpg',
+            'image' => '/images/banner_careers.webp',
         ],
         'contact' => [
-            'image' => '/images/banner_contact.jpg',
+            'image' => '/images/banner_contact.webp',
         ],
         'privacy' => [
             'image' => '/images/banner_privacy.jpg',

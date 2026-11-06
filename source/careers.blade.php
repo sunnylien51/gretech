@@ -219,6 +219,13 @@ description: 人力招募
                         <textarea id="apply-message" name="message" rows="3" class="form-control" placeholder="其他想補充的資訊（選填）"></textarea>
                     </div>
 
+                    <p class="text-cb3 text-gray3">
+                        此網站受 Google reCAPTCHA 保護，適用
+                        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-main1 underline-offset-2 hover:underline">隱私權政策</a>
+                        與
+                        <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" class="text-main1 underline-offset-2 hover:underline">服務條款</a>。
+                    </p>
+
                     <div class="flex flex-wrap items-center justify-end gap-3 pt-1">
                         <button type="button" class="job-apply-cancel text-cb2 text-gray4 transition-colors hover:text-main1" data-apply-cancel>
                             取消

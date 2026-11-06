@@ -306,12 +306,11 @@
 
   .hero-copy {
     opacity: 0;
-    filter: blur(14px);
-    transform: translateY(0.75rem);
+    transform: translateY(0.6rem);
   }
 
   .hero-copy.is-animate {
-    animation: page-banner-title-in 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: page-banner-title-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
   .hero-controls {
@@ -348,7 +347,6 @@
 
     .hero-copy {
       opacity: 1;
-      filter: none;
       transform: none;
     }
 
@@ -1188,16 +1186,75 @@
     margin: 0;
   }
 
+  /* 產品／應用內文：後台 HTML 編輯器輸出 */
   .product-detail-body {
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
     width: 100%;
+    max-width: 40rem;
   }
 
-  .product-detail-body p {
+  .product-detail-body > :first-child {
+    margin-top: 0;
+  }
+
+  .product-detail-body > :last-child {
+    margin-bottom: 0;
+  }
+
+  .product-detail-body p,
+  .product-detail-body ul,
+  .product-detail-body ol {
     margin: 0;
-    max-width: 40rem;
+  }
+
+  .product-detail-body ul,
+  .product-detail-body ol {
+    padding-left: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .product-detail-body li::marker {
+    color: theme('colors.main2');
+  }
+
+  .product-detail-body a {
+    color: theme('colors.main1');
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .product-detail-body strong,
+  .product-detail-body b {
+    color: theme('colors.gray5');
+    font-weight: 700;
+  }
+
+  .product-detail-body h3,
+  .product-detail-body h4 {
+    margin: 0.35rem 0 0;
+    color: theme('colors.gray5');
+    font-family: theme('fontFamily.sans');
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .product-detail-body h3 {
+    font-size: 1.125rem;
+  }
+
+  .product-detail-body h4 {
+    font-size: 1rem;
+  }
+
+  .product-detail-body img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
   }
 
   .product-detail-tags {
@@ -1270,6 +1327,21 @@
     color: theme('colors.main1');
   }
 
+  /* 應用內頁：相關產品（介紹下方全寬；卡片沿用 .products-item，兩兩並列） */
+  .related-products {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2rem;
+  }
+
+  .related-products .products-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
   @screen md {
     .product-detail {
       grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.2fr);
@@ -1280,6 +1352,15 @@
     .product-detail-media {
       width: 100%;
       max-width: none;
+    }
+
+    .related-products {
+      gap: 2.5rem;
+    }
+
+    .related-products .products-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.875rem 1.25rem;
     }
   }
 
@@ -1930,6 +2011,8 @@
   /* 內頁 Banner 高度（compact 用雙 class 提高權重，避免被預設高度蓋掉） */
   .page-banner {
     height: 280px;
+    /* 圖淡入前先留底色，loading 時看得到這塊會出現 */
+    background-color: theme('colors.gray1');
   }
 
   .page-banner.page-banner--compact {
@@ -2070,16 +2153,14 @@
     }
   }
 
-  /* 內頁 banner 進場：圖片淡入、標題模糊變清楚 */
+  /* 內頁 banner 進場：等 .is-ready（圖載完）再播，避免載入卡頓時動畫已跑完而「突然出現」 */
   .page-banner-image {
     opacity: 0;
-    transform: scale(1.04);
-    animation: page-banner-image-in 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    transform: scale(1.03);
   }
 
   .page-banner-veil {
     opacity: 0;
-    animation: page-banner-fade-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards;
   }
 
   .page-banner-crumbs {
@@ -2087,7 +2168,6 @@
     overflow: hidden;
     flex-wrap: nowrap;
     opacity: 0;
-    animation: page-banner-fade-in 1s ease-out 0.35s forwards;
   }
 
   .page-banner-crumb-link,
@@ -2108,15 +2188,30 @@
 
   .page-banner-title {
     opacity: 0;
-    filter: blur(14px);
-    transform: translateY(0.75rem);
-    animation: page-banner-title-in 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.28s forwards;
+    transform: translateY(0.6rem);
+  }
+
+  .page-banner.is-ready .page-banner-image {
+    animation: page-banner-image-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .page-banner.is-ready .page-banner-veil {
+    animation: page-banner-fade-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.04s forwards;
+  }
+
+  .page-banner.is-ready .page-banner-crumbs {
+    animation: page-banner-fade-in 0.8s ease-out 0.22s forwards;
+  }
+
+  .page-banner.is-ready .page-banner-title {
+    /* 不用 blur：模糊動畫很吃效能，容易造成進場卡頓 */
+    animation: page-banner-title-in 1.05s cubic-bezier(0.22, 1, 0.36, 1) 0.16s forwards;
   }
 
   @keyframes page-banner-image-in {
     from {
       opacity: 0;
-      transform: scale(1.04);
+      transform: scale(1.03);
     }
     to {
       opacity: 1;
@@ -2136,12 +2231,10 @@
   @keyframes page-banner-title-in {
     from {
       opacity: 0;
-      filter: blur(14px);
-      transform: translateY(0.75rem);
+      transform: translateY(0.6rem);
     }
     to {
       opacity: 1;
-      filter: blur(0);
       transform: translateY(0);
     }
   }
@@ -2150,7 +2243,11 @@
     .page-banner-image,
     .page-banner-veil,
     .page-banner-crumbs,
-    .page-banner-title {
+    .page-banner-title,
+    .page-banner.is-ready .page-banner-image,
+    .page-banner.is-ready .page-banner-veil,
+    .page-banner.is-ready .page-banner-crumbs,
+    .page-banner.is-ready .page-banner-title {
       opacity: 1;
       filter: none;
       transform: none;
@@ -2160,8 +2257,8 @@
 
   .history-section {
     background-color: theme('colors.bg');
-    /* 相對 static/ 目錄，Live Server 開 build_production 子路徑也能載到 */
-    background-image: url('../images/pattern.jpg');
+    /* 與 object_cover 同層：從 _assets/css 指到 source/images，Vite 開發／打包都會正確解析 */
+    background-image: url('../../images/pattern.jpg');
     background-repeat: repeat;
   }
 
@@ -2204,6 +2301,37 @@
 
   .history-item:last-child .history-line {
     display: none;
+  }
+
+  /* 外框鎖 3/4 讓三張同高；圖用 contain 完整顯示並置中 */
+  .sustainability-cert {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border: 1px solid theme('colors.gray1');
+    background-color: theme('colors.bg');
+    padding: 0.75rem;
+    transition: border-color 0.25s ease;
+  }
+
+  .sustainability-cert:hover {
+    border-color: theme('colors.main2');
+  }
+
+  .sustainability-cert:focus-visible {
+    outline: 2px solid theme('colors.main1');
+    outline-offset: 2px;
+  }
+
+  .sustainability-cert-image {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
   }
 
   /* 標題底線：雙色短線（main2 + gray2） */

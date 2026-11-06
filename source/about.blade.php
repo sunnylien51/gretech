@@ -162,4 +162,82 @@ description: 關於我們
             </div>
         </div>
     </section>
+
+    {{-- ========== 企業永續（HTML 範本；後台整段編輯器） ========== --}}
+    <section class="bg-white" aria-label="企業永續">
+        <div class="layout-grid flex flex-col items-center py-16 md:py-20 lg:pt-24 lg:pb-28">
+            {{-- 與公司沿革同寬；寬度／直向排版集中在這一層 --}}
+            <div class="flex w-full max-w-[900px] flex-col items-center gap-12 md:gap-14 lg:gap-16">
+                <div class="flex flex-col items-center gap-5" data-aos="fade-up">
+                    <h2 class="text-center text-ch3 text-gray5 lg:text-ch2">企業永續</h2>
+                    <div class="title-rule" aria-hidden="true"></div>
+                </div>
+
+                <div class="flex w-full flex-col items-center gap-5 text-center" data-aos="fade-up">
+                    <p class="text-cb1 font-bold text-gray5">
+                        100%廢濾心再利用可產生超過80%的PP塑膠粒，再利用技術可創造可觀效益
+                    </p>
+                    <p class="text-cb2 text-gray4">
+                        佢岳環保科技成立於民國105年。本著地球只有一個的理念，專注於「事業廢棄物回收再利用」事業，積極從事本業的鑽研，並重視環保、工安與衛生的落實。
+                        基於上述經營理念，本公司全力投入以下綠色循環再利用事業，目前已取得R-0201(廢塑膠)與廢濾心(C-0110)的通案再利用許可，並已取得ISO 14064-1溫室氣體查驗報告意見書，未來將持續投入綠色循環再利用事業，為地球永續盡一份心力。
+                    </p>
+                </div>
+
+                <div class="grid w-full grid-cols-1 gap-5 md:grid-cols-3 md:gap-6" data-aos="fade-up">
+                    <a
+                        href="{{ $page->baseUrl }}/images/cert1.jpg"
+                        data-fancybox="sustainability-certs"
+                        data-caption="溫室氣體查驗報告意見書（ISO 14064-1）"
+                        class="sustainability-cert"
+                    >
+                        <img
+                            src="{{ $page->baseUrl }}/images/cert1.jpg"
+                            alt="溫室氣體查驗報告意見書（ISO 14064-1）"
+                            class="sustainability-cert-image"
+                            loading="lazy"
+                            decoding="async"
+                        >
+                    </a>
+                    <a
+                        href="{{ $page->baseUrl }}/images/cert2.jpeg"
+                        data-fancybox="sustainability-certs"
+                        data-caption="中華民國專利證書"
+                        class="sustainability-cert"
+                    >
+                        <img
+                            src="{{ $page->baseUrl }}/images/cert2.jpeg"
+                            alt="中華民國專利證書"
+                            class="sustainability-cert-image"
+                            loading="lazy"
+                            decoding="async"
+                        >
+                    </a>
+                    <a
+                        href="{{ $page->baseUrl }}/images/cert3.jpeg"
+                        data-fancybox="sustainability-certs"
+                        data-caption="中華民國專利證書"
+                        class="sustainability-cert"
+                    >
+                        <img
+                            src="{{ $page->baseUrl }}/images/cert3.jpeg"
+                            alt="中華民國專利證書"
+                            class="sustainability-cert-image"
+                            loading="lazy"
+                            decoding="async"
+                        >
+                    </a>
+                </div>
+
+                <figure class="w-full" data-aos="fade-up">
+                    <img
+                        src="{{ $page->baseUrl }}/images/about3.jpg"
+                        alt="廢濾心循環再利用示意：從焚化痛點到 PP 塑膠粒綠色循環"
+                        class="h-auto w-full"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                </figure>
+            </div>
+        </div>
+    </section>
 @endsection

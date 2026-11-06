@@ -74,7 +74,7 @@ description: 聯絡我們
                     <div class="title-rule" aria-hidden="true"></div>
                 </div>
 
-                <dl class="flex flex-col gap-0">
+                <dl class="flex flex-col gap-0 ">
                         <div class="contact-meta-row">
                             <dt>地址</dt>
                             <dd>{{ $contact['address'] }}</dd>

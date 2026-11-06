@@ -49,11 +49,15 @@
     ]));
 @endphp
 <section class="{{ $sectionClass }}" aria-label="{{ $enTitle !== '' ? $enTitle : ($crumbs[0]['name'] ?? '') }}">
-    {{-- 背景圖（進入淡入） --}}
+    {{-- 背景圖（等載入後由 JS 加 is-ready 再淡入） --}}
     <img
         src="{{ $page->baseUrl }}{{ $bannerImage }}"
         alt=""
         class="page-banner-image absolute inset-0 h-full w-full object-cover"
+        width="1920"
+        height="880"
+        decoding="async"
+        fetchpriority="high"
         aria-hidden="true"
     >
     {{-- 背景遮罩（加深圖片，讓白字清楚；可傳 showVeil => false 關閉） --}}
