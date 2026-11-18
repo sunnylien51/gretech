@@ -12,22 +12,16 @@ description: 關於我們
         'crumbs' => [['name' => '關於我們']],
     ])
 
-    {{-- ========== 關於我們＋經營理念 ========== --}}
     <section class="bg-white" aria-label="關於我們">
     <div class="layout-grid flex flex-col gap-16 py-16 md:gap-20 md:py-20 lg:gap-24 lg:py-28">
 
-        {{-- ----- 上：關於我們介紹 ----- --}}
         <div class="flex w-full flex-col items-center gap-12 lg:flex-row lg:items-center lg:gap-20">
-            {{-- 左側：標題／內文／統計 --}}
             <div class="flex w-full flex-1 flex-col items-start gap-10 md:gap-12" data-aos="fade-up">
-                {{-- 區塊標題＋底線 --}}
                 <div class="flex flex-col items-start gap-5">
                     <h2 class="text-ch3 text-gray5 lg:text-ch2">關於我們</h2>
-                    {{-- 底線（雙色短線） --}}
                     <div class="title-rule" aria-hidden="true"></div>
                 </div>
 
-                {{-- 主標＋說明 --}}
                 <div class="flex w-full flex-col items-start gap-5">
                     <h3 class="text-ch3 text-gray5">
                         專注 PCB 產業，串聯產品、技術與製程需求
@@ -39,9 +33,7 @@ description: 關於我們
                     </p>
                 </div>
 
-                {{-- 統計列 --}}
                 <div class="flex w-full flex-col gap-5 md:flex-row md:items-center md:gap-9">
-                    {{-- 統計 1：團隊人數 --}}
                     <div class="flex flex-1 flex-col items-center gap-1.5" data-aos="fade-up" data-aos-delay="100">
                         <div class="flex items-end gap-2">
                             <span class="text-eh3 text-main1 lg:text-eh2">50</span>
@@ -49,9 +41,7 @@ description: 關於我們
                         </div>
                         <p class="text-center text-cb3 text-gray5">擁有專業經驗的團隊成員</p>
                     </div>
-                    {{-- 分隔線 --}}
                     <div class="h-px w-full bg-gray2 md:h-16 md:w-px md:shrink-0" aria-hidden="true"></div>
-                    {{-- 統計 2：資本額 --}}
                     <div class="flex flex-1 flex-col items-center gap-1.5" data-aos="fade-up" data-aos-delay="200">
                         <div class="flex items-end gap-2">
                             <span class="text-eh3 text-main1 lg:text-eh2">2.18</span>
@@ -59,9 +49,7 @@ description: 關於我們
                         </div>
                         <p class="text-center text-cb3 text-gray5">實收資本額</p>
                     </div>
-                    {{-- 分隔線 --}}
                     <div class="h-px w-full bg-gray2 md:h-16 md:w-px md:shrink-0" aria-hidden="true"></div>
-                    {{-- 統計 3：據點數 --}}
                     <div class="flex flex-1 flex-col items-center gap-1.5" data-aos="fade-up" data-aos-delay="300">
                         <div class="flex items-end gap-2">
                             <span class="text-eh3 text-main1 lg:text-eh2">3</span>
@@ -72,15 +60,12 @@ description: 關於我們
                 </div>
             </div>
 
-            {{-- 右側：造型圖＋ Founded 徽章 --}}
             <div class="relative w-full flex-1" data-aos="fade-left" data-aos-delay="150">
-                {{-- 主圖（已含造型遮罩的 PNG） --}}
                 <img
                     src="{{ $page->baseUrl }}/images/about2.png"
                     alt="精密製程與 IC 元件"
                     class="mx-auto h-auto w-full max-w-md lg:max-w-none"
                 >
-                {{-- Founded 徽章 --}}
                 <img
                     src="{{ $page->baseUrl }}/images/founded.png"
                     alt=""
@@ -90,28 +75,21 @@ description: 關於我們
             </div>
         </div>
 
-        {{-- ----- 下：經營理念 ----- --}}
         <div class="flex w-full flex-col items-start gap-10 md:gap-12" data-aos="fade-up">
-            {{-- 區塊標題＋底線 --}}
             <div class="flex flex-col items-start gap-5">
                 <h2 class="text-ch3 text-gray5 lg:text-ch2">經營理念</h2>
-                {{-- 底線（雙色短線） --}}
                 <div class="title-rule" aria-hidden="true"></div>
             </div>
 
-            {{-- 理念三欄 --}}
             <div class="flex w-full flex-col gap-6 md:flex-row md:gap-8 lg:gap-12">
-                {{-- 理念 1：嚴選品質 --}}
                 <div class="philosophy-card flex flex-1 flex-col gap-3 border-l-[3px] border-main2 px-6 py-6 md:px-8 md:py-7" data-aos="fade-up" data-aos-delay="100">
                     <h3 class="text-ch4 text-gray5">嚴選品質</h3>
                     <p class="text-cb2 text-gray3">嚴選業界優質產品，提供值得信賴的產品與解決方案。</p>
                 </div>
-                {{-- 理念 2：誠信經營 --}}
                 <div class="philosophy-card flex flex-1 flex-col gap-3 border-l-[3px] border-main2 px-6 py-6 md:px-8 md:py-7" data-aos="fade-up" data-aos-delay="200">
                     <h3 class="text-ch4 text-gray5">誠信經營</h3>
                     <p class="text-cb2 text-gray3">堅持誠信、務實與負責的態度，與客戶及合作夥伴建立長期信任。</p>
                 </div>
-                {{-- 理念 3：服務至上 --}}
                 <div class="philosophy-card flex flex-1 flex-col gap-3 border-l-[3px] border-main2 px-6 py-6 md:px-8 md:py-7" data-aos="fade-up" data-aos-delay="300">
                     <h3 class="text-ch4 text-gray5">服務至上</h3>
                     <p class="text-cb2 text-gray3">深入了解客戶需求，提供專業、快速且有效率的服務，創造長期合作價值。</p>
@@ -163,10 +141,8 @@ description: 關於我們
         </div>
     </section>
 
-    {{-- ========== 企業永續（HTML 範本；後台整段編輯器） ========== --}}
     <section class="bg-white" aria-label="企業永續">
         <div class="layout-grid flex flex-col items-center py-16 md:py-20 lg:pt-24 lg:pb-28">
-            {{-- 與公司沿革同寬；寬度／直向排版集中在這一層 --}}
             <div class="flex w-full max-w-[900px] flex-col items-center gap-12 md:gap-14 lg:gap-16">
                 <div class="flex flex-col items-center gap-5" data-aos="fade-up">
                     <h2 class="text-center text-ch3 text-gray5 lg:text-ch2">企業永續</h2>

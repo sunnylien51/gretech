@@ -20,10 +20,8 @@ description: 人力招募
         'crumbs' => [['name' => '人力招募']],
     ])
 
-    {{-- ========== 公司福利＋人力銀行 ========== --}}
     <section class="bg-white" aria-label="公司福利">
         <div class="layout-grid flex flex-col gap-12 py-16 md:py-20 lg:py-28">
-            {{-- 區塊標題 --}}
             <div class="flex flex-col items-start gap-5" data-aos="fade-up">
                 <h2 class="text-ch3 text-gray5 lg:text-ch2">加入佢朋</h2>
                 <div class="title-rule" aria-hidden="true"></div>
@@ -32,7 +30,6 @@ description: 人力招募
                 </p>
             </div>
 
-            {{-- 福利項目 --}}
             <div class="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
                 <div class="philosophy-card flex flex-col gap-1 border-l-[3px] border-main2 pl-6 py-5" data-aos="fade-up">
                     <h3 class="text-ch5 text-gray5">完善保險</h3>
@@ -52,7 +49,6 @@ description: 人力招募
                 </div>
             </div>
 
-            {{-- 人力銀行連結 --}}
             <div class="flex w-full flex-col items-start gap-5 border-t border-gray1 pt-10 md:pt-12" data-aos="fade-up">
                 <div class="flex flex-col gap-2">
                     <h3 class="text-ch4 text-gray5">人力銀行職缺</h3>
@@ -89,12 +85,14 @@ description: 人力招募
             <div class="flex flex-col items-center gap-5" data-aos="fade-up">
                 <h2 class="text-ch3 text-gray5 lg:text-ch2">目前職缺</h2>
                 <div class="title-rule" aria-hidden="true"></div>
-                <p class="text-cb2 text-gray4">點選職缺查看內容，若要應徵請點「應徵此職缺」直接填寫。</p>
+                @if (count($jobs) > 0)
+                    <p class="text-cb2 text-gray4">點選職缺查看內容，若要應徵請點「應徵此職缺」直接填寫。</p>
+                @endif
             </div>
 
             {{-- 職缺卡面 --}}
             <div class="flex w-full flex-col gap-4" id="job-list">
-                @foreach ($jobs as $job)
+                @forelse ($jobs as $job)
                     <article
                         class="job-card bg-white"
                         data-job-id="{{ $job['id'] }}"
@@ -157,7 +155,9 @@ description: 人力招募
                             </div>
                         </div>
                     </article>
-                @endforeach
+                @empty
+                    <p class="py-10 text-center text-cb1 text-gray4" data-aos="fade-up">目前暫無職缺</p>
+                @endforelse
             </div>
 
             {{-- 應徵表單（暫存，由 JS 移入職缺卡） --}}
